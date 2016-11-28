@@ -33,6 +33,9 @@
         "System.Net.Http": "4.0.0.0",
         "System.Runtime.Serialization": "4.0.0",
         "System.Xml": "4.0.0.0"
+      },
+      "dependencies": {
+        "System.Net.Requests": "4.3.0"
       }
     },
     "netstandard1.3": {
@@ -44,20 +47,21 @@
         "define": [ "NETSTANDARD" ]
       },
       "dependencies": {
-        "NETStandard.Library": "1.6.0",
-        "System.Collections.Specialized": "4.0.1",
-        "System.Diagnostics.TraceSource": "4.0.0",
-        "System.Net.NameResolution": "4.0.0",
-        "System.Net.Requests": "4.0.11",
-        "System.Net.WebSockets": "4.0.0",
-        "System.Net.Security": "4.0.0",
-        "System.Runtime.Serialization.Json": "4.0.1",
-        "System.Runtime.Serialization.Primitives": "4.1.1",
-        "System.Runtime.Serialization.Xml": "4.1.1",
-        "System.Threading.Thread": "4.0.0",
-        "System.Threading.ThreadPool": "4.0.10"
+        "System.Collections.Specialized": "4.3.0",
+        "System.Net.WebSockets": "4.3.0",
+        "System.Threading.Thread": "4.3.0",
+        "System.Threading.ThreadPool": "4.3.0"
       },
       "imports": "dnxcore50"
     }
+  },
+  "dependencies": {
+    "NETStandard.Library": "1.6.1",
+    "System.Diagnostics.TraceSource": "4.3.0",
+    "System.Net.NameResolution": "4.3.0",
+    "System.Net.Security": "4.3.0",
+    "System.Runtime.Serialization.Json": "4.3.0",
+    "System.Runtime.Serialization.Primitives": "4.3.0",
+    "System.Runtime.Serialization.Xml": "4.3.0"
   }
 }
