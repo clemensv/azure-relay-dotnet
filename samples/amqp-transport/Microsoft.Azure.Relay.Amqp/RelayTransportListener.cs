@@ -1,18 +1,11 @@
 // Copyright (c) Microsoft. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-using Microsoft.Azure.Amqp;
-using Microsoft.Azure.Amqp.Transport;
-
 namespace Microsoft.Azure.Relay.Amqp
 {
     using System;
-    using System.Collections.Generic;
-    using System.Net;
-    using System.Net.Sockets;
-    using System.Threading;
     using System.Threading.Tasks;
-    using Azure.Amqp.Util;
+    using Microsoft.Azure.Amqp.Transport;
 
     sealed class RelayTransportListener : TransportListener
     {
@@ -22,7 +15,11 @@ namespace Microsoft.Azure.Relay.Amqp
         public RelayTransportListener(RelayTransportSetting transportSetting)
             : base("relay-listener")
         {
-            if (transportSetting == null) throw new ArgumentNullException(nameof(transportSetting));
+            if (transportSetting == null)
+            {
+                throw new ArgumentNullException(nameof(transportSetting));
+            }
+
             this.transportSetting = transportSetting;
         }
 
@@ -40,7 +37,6 @@ namespace Microsoft.Azure.Relay.Amqp
         protected override void OnListen()
         {
             string listenHost = this.transportSetting.RelayNamespace;
-            Fx.Assert(listenHost != null, "RelayNamespace cannot be null!");
             
             this.listener = new HybridConnectionListener(new Uri(string.Format("sb://{0}/{1}", transportSetting.RelayNamespace, transportSetting.HybridConnectionName)), transportSetting.TokenProvider);
             Task.Run((Func<Task>)ListenAsync);
@@ -48,7 +44,7 @@ namespace Microsoft.Azure.Relay.Amqp
 
         async Task ListenAsync()
         {
-            while (true)
+            while (this.listener != null)
             {
                 try
                 {
@@ -56,14 +52,14 @@ namespace Microsoft.Azure.Relay.Amqp
                     if (stream != null)
                     {
                         TransportAsyncCallbackArgs args = new TransportAsyncCallbackArgs();
-                        args.Transport = new RelayTransport(stream ,transportSetting);
+                        args.Transport = new RelayTransport(stream, transportSetting);
                         args.CompletedSynchronously = false;
                         this.OnTransportAccepted(args);
                     }
                 }
                 catch (Exception)
                 {
-                    throw;
+                    // keep accepting as long as the listener is not closed
                 }
             }
         }
@@ -75,7 +71,6 @@ namespace Microsoft.Azure.Relay.Amqp
                 this.listener.CloseAsync().GetAwaiter().GetResult();
                 this.listener = null;
             }
-        }
-        
+        }        
     }
 }
